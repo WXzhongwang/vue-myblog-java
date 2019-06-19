@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.ThumbUpRecordDao">
+    <insert id="add" parameterType="com.ssm.domain.ThumbUpRecord">
+        INSERT INTO thumbuprecord (
+   			ID,
+   			IP,
+   			ArticleID,
+   			Time,
+			City,
+			CreateBy,
+			CreateTime,
+			ModifiedBy,
+			ModifiedTime
+		) VALUES (
+			#{ID},
+   			#{IP},
+   			#{ArticleID},
+   			#{Time},
+			#{City},
+			#{CreateBy},
+			#{CreateTime},
+			#{ModifiedBy},
+			#{ModifiedTime}
+		)
+    </insert>
+	
+    <select id="getAll" resultType="com.ssm.domain.ThumbUpRecord">
+        select * from thumbuprecord 
+          <where>
+        <if test="ArticleID !=null and ArticleID != ''">
+         and ArticleID=#{ArticleID}  
+        </if>        
+        </where>
+    </select>  
+    
+    <select id="hasAlreadyThumbUp" resultType="com.ssm.domain.ThumbUpRecord">
+    	select * from thumbuprecord where ArticleID=#{ArticleID}
+        and date_format(from_unixtime(createTime),'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')  
+    </select>
+</mapper>

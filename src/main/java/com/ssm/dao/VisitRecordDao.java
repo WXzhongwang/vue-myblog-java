@@ -9,6 +9,7 @@ import com.ssm.domain.VisitRecord;
 
 @Repository
 public interface VisitRecordDao {
+	
     public abstract void add(VisitRecord visitRecord); 
     
 	public abstract List<VisitRecord> getAll(Article article);

@@ -1,6 +1,7 @@
 package com.ssm.controller;
 
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ssm.base.util.AddressUtil;
 import com.ssm.base.util.AjaxResponder;
+import com.ssm.base.util.WebServletUtil;
 import com.ssm.domain.Article;
+import com.ssm.domain.ThumbUpRecord;
 import com.ssm.service.ArticleService;
+import com.ssm.service.ThumbUpRecordService;
 
 /**
  * Article Controller
@@ -33,6 +38,8 @@ import com.ssm.service.ArticleService;
 public class ArticleController {
 	@Autowired 
 	ArticleService articleService;
+	@Autowired 
+	ThumbUpRecordService thumbUpRecordService;
 	
 	
 	@ResponseBody
@@ -117,6 +124,27 @@ public class ArticleController {
 		AjaxResponder result = null;
 		List<Article> list = articleService.getAll(null);
 		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", list);
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/thumbup/{id}", method=RequestMethod.GET)
+	public AjaxResponder thumpUp(@PathVariable("id") Integer id, HttpServletRequest request, HttpServletResponse response){
+		AjaxResponder result = null;
+		System.out.println(id);
+		if (!thumbUpRecordService.hasAlreadyThumbUp(id)) {
+			ThumbUpRecord thumbUpRecord = new ThumbUpRecord();
+			thumbUpRecord.setArticleID(id);
+			String iPString = WebServletUtil.getClientIpAddress(request);
+			System.out.println("IP地址：" + iPString);
+			thumbUpRecord.setIP(iPString);
+			thumbUpRecord.setCity(AddressUtil.GetAddressByIp(iPString));
+			thumbUpRecord.setCreateTime(new Date());
+			thumbUpRecordService.add(thumbUpRecord);
+			result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", null);
+		}else {
+			result = AjaxResponder.getInstance(Boolean.FALSE, "查询成功", null);
+		}		
 		return result;
 	}
 }
