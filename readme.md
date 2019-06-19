@@ -1,2 +1,2 @@
 # ssm
-## »ùÓÚspring +spring MVC +mybtis¿ò¼Ü£¬mavenÊµÏÖjar°ü¹ÜÀí
+## ä½¿ç”¨spring +spring MVC + mybtisæä¾›æ¥å£ã€‚
