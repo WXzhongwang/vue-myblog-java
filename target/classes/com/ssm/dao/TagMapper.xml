@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.TagDao">
+    <insert id="addTag" parameterType="com.ssm.domain.Tag">
+        INSERT INTO tag (
+   			Name,
+   			Description
+		) VALUES (
+   			#{Name},
+   			#{Description}
+		)
+    </insert>
+	
+    <select id="getTag" parameterType="int" resultType="com.ssm.domain.Tag">
+        select * from tag where id = #{id}
+        order by createTime desc
+    </select>
+    
+    <update id="updateTag" parameterType="com.ssm.domain.Tag">
+        update tag set 
+        Name = #{Name},
+        Description=#{Description},
+        CreateBy=#{CreateBy},
+        CreateTime=#{CreateTime},
+        ModifiedBy=#{ModifiedBy},
+        ModifiedTime=#{ModifiedTime}
+        where id=#{id}
+    </update>
+    
+    <delete id="deleteTag" parameterType="int">
+        delete from tag where id=#{id}
+    </delete>
+    
+    <select id="getAll" resultType="com.ssm.domain.Tag">
+        select * from tag
+        order by createTime desc
+    </select>
+    
+     <select id="getArticleTagList" resultType="com.ssm.domain.Tag">
+        SELECT tag.* FROM tag RIGHT JOIN articletag ON tag.ID = articletag.TagID
+        WHERE articletag.ArticleID = #{ArticleID}
+    </select>
+</mapper>

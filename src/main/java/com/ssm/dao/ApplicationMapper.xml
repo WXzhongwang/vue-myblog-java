@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.ApplicationDao">
+    <insert id="add" parameterType="com.ssm.domain.Application">
+        INSERT INTO application (
+   			ID,
+   			Key,
+   			Value   			
+		) VALUES (
+			#{ID},
+   			#{Key},
+   			#{Value}
+   		)
+    </insert>
+	
+    <select id="getAll" resultType="com.ssm.domain.Application">
+        select * from application 
+    </select>
+    
+    <update id="updateBlogName">
+        update application set Value = #{name} where ID = 1;        
+    </update>
+    <update id="updateBlogIndividualitySignature">
+        update application set Value = #{individualitySignature} where ID = 2;        
+    </update>
+    <update id="updateBlogIntroduce">
+        update application set Value = #{introduce} where ID = 3;        
+    </update>
+</mapper>

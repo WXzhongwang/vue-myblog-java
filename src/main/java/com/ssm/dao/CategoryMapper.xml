@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.dao.CategoryDao">
+    <insert id="addCategory" parameterType="com.ssm.domain.Category">
+        INSERT INTO category (
+   			ID,
+   			Name,
+   			Description,
+			CreateBy,
+			CreateTime,
+			ModifiedBy,
+			ModifiedTime
+		) VALUES (
+			#{ID},
+			#{Name},
+   			#{Description},
+			#{CreateBy},
+			#{CreateTime},
+			#{ModifiedBy},
+			#{ModifiedTime}
+		)
+    </insert>
+	
+    <select id="getCategory" parameterType="int" resultType="com.ssm.domain.Category">
+        select * from category where id = #{id}
+    </select>
+    
+    <update id="updateCategory" parameterType="com.ssm.domain.Category">
+        update category set 
+        Name = #{Name},
+        Description=#{Description},
+        CreateBy=#{CreateBy},
+        CreateTime=#{CreateTime},
+        ModifiedBy=#{ModifiedBy},
+        ModifiedTime=#{ModifiedTime}
+        where id=#{id}
+    </update>
+    
+    <delete id="deleteCategory" parameterType="int">
+        delete from category where id=#{id}
+    </delete>
+    
+    <select id="getAll" resultType="com.ssm.domain.Category">
+        select * from category
+        <where>
+        <if test="ParentCategoryID !=null and ParentCategoryID != ''">
+         and ParentCategoryID=#{ParentCategoryID}  
+        </if>
+        </where>
+    </select>
+    <select id="getMainCategoryList" resultType="com.ssm.domain.Category">
+        select * from category
+        where ParentCategoryID is null 
+        order by CreateTime desc      
+    </select>
+    <select id="getSubCategoryList" resultType="com.ssm.domain.Category">
+        select * from category
+        where ParentCategoryID=#{ID}  
+        order by CreateTime desc
+    </select>
+</mapper>
