@@ -25,6 +25,7 @@ public class Article implements Serializable{
 	private List<Tag> Tags = new ArrayList<Tag>();
 	private int VisitRecordCount;
 	private int ThumpUpCount;
+	private String State;
 	
 	public int getVisitRecordCount() {
 		return VisitRecordCount;
@@ -111,5 +112,11 @@ public class Article implements Serializable{
 	}
 	public void setCategoryID(String categoryID) {
 		this.CategoryID = categoryID;
+	}
+	public String getState() {
+		return State;
+	}
+	public void setState(String state) {
+		State = state;
 	}	
 }

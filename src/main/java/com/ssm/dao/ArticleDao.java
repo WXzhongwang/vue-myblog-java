@@ -22,4 +22,6 @@ public interface ArticleDao {
 	public abstract List<Article> getHotArticles(Article article);
 	
 	public abstract Map<String, Integer> getSideBar();
+	
+	public abstract void thumbUpArticle(int ID);
 }  

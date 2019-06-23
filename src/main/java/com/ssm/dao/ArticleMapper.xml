@@ -3,7 +3,6 @@
 <mapper namespace="com.ssm.dao.ArticleDao">
     <insert id="addArticle" parameterType="com.ssm.domain.Article">
         INSERT INTO Article (
-   			ID,
    			Title,
    			Content,
    			Thumbnail,
@@ -14,10 +13,11 @@
 			CreateBy,
 			CreateTime,
 			ModifiedBy,
-			ModifiedTime
+			ModifiedTime,
+			State
 		) VALUES (
-			#{ID},
    			#{Title},
+   			#{Content},
    			#{Thumbnail},
    			#{PublishTime},
 			#{IsHot},
@@ -26,7 +26,8 @@
 			#{CreateBy},
 			#{CreateTime},
 			#{ModifiedBy},
-			#{ModifiedTime}
+			#{ModifiedTime},
+			#{State}
 		)
     </insert>
 	
@@ -38,6 +39,7 @@
         update article set 
         Title = #{Title},
         Thumbnail=#{Thumbnail},
+        Content=#{Content},
         PublishTime=#{PublishTime},
         IsHot=#{IsHot},
         VisitRecordCount=#{VisitRecordCount},
@@ -45,8 +47,9 @@
         CreateBy=#{CreateBy},
         CreateTime=#{CreateTime},
         ModifiedBy=#{ModifiedBy},
-        ModifiedTime=#{ModifiedTime}
-        where id=#{id}
+        ModifiedTime=#{ModifiedTime},
+        State=#{State}
+        where ID=#{ID}
     </update>
     
     <delete id="deleteArticle" parameterType="int">
@@ -69,6 +72,7 @@
     <select id="getHotArticles" resultType="com.ssm.domain.Article">
         select  * from article
         where IsHot = 1
+        and state = 'publish'
         order by CreateTime desc limit 10
     </select>
     
@@ -78,4 +82,10 @@
 			(select count(1) as tags from tag) as b,
 			(select count(1)  as categories from category where ParentCategoryID != null) as c       
     </select>
+    <update id="thumbUpArticle">
+        update article set 
+		thumpupcount = thumpupcount + 1     
+        where id=#{id}
+    </update>
+    
 </mapper>

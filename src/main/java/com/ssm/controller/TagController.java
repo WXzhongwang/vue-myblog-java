@@ -17,16 +17,11 @@ import com.ssm.base.util.AjaxResponder;
 import com.ssm.domain.Tag;
 import com.ssm.service.TagService;
 
-/**
- * Blog Controller
- * @author shengwangzhong
- * @date: 2019-064-19 16:28
- */
+
+@CrossOrigin
 @Controller
 @RequestMapping(value = "/tags")
-@CrossOrigin
 public class TagController {
-
 	@Autowired
 	TagService tagService;
 	
@@ -39,36 +34,25 @@ public class TagController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/save", method=RequestMethod.POST)
-	public AjaxResponder saveTag(@RequestBody Tag tag, HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value="/test/test", method=RequestMethod.GET)
+	public AjaxResponder test(HttpServletRequest request,HttpServletResponse response){
+		AjaxResponder result = null;
+		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", "test");
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/new/save", method=RequestMethod.POST)
+	public AjaxResponder saveTag(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value="name")String name,
+			@RequestParam(value="description")String description
+			){
 		AjaxResponder result = null;	
-		System.out.println(tag.getName());
+		Tag tag = new Tag();
+		tag.setName(name);
+		tag.setDescription(description);
 		tagService.addTag(tag);
 		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", null);
 		return result;
 	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public AjaxResponder get(@PathVariable("id") Integer id){
-		AjaxResponder result = null;
-		
-		return result;
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public AjaxResponder edit(@PathVariable("id") Integer id) {
-		AjaxResponder result = null;
-		
-		return result;
-	}
-	
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public AjaxResponder delte(@PathVariable("id") Integer id) {
-		AjaxResponder result = null;
-		
-		return result;
-	}	
 }

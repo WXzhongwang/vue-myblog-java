@@ -7,7 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.ssm.domain.Article;
 
 public interface ArticleService {
-public abstract void addArticle(Article article); 
+	public abstract void addArticle(Article article); 
 	
 	public abstract void updateArticle(Article article);
 	
@@ -22,4 +22,6 @@ public abstract void addArticle(Article article);
 	public abstract PageInfo<Article> findByPage(Integer page,Integer size,Article article);
 	
 	public abstract Map<String, Integer> getSideBar();
+	
+	public abstract void thumbUpArticle(int ID);
 }

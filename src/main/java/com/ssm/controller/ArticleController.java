@@ -11,13 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ssm.base.util.AddressUtil;
 import com.ssm.base.util.AjaxResponder;
@@ -32,23 +30,22 @@ import com.ssm.service.ThumbUpRecordService;
  * @author shengwangzhong
  * @date: 2019-064-19 16:28
  */
+@CrossOrigin
 @Controller
 @RequestMapping(value = "/articles")
-@CrossOrigin
 public class ArticleController {
 	@Autowired 
 	ArticleService articleService;
 	@Autowired 
 	ThumbUpRecordService thumbUpRecordService;
-	
-	
+		
 	@ResponseBody
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public AjaxResponder add(Article article,HttpServletRequest request,HttpServletResponse response){
-		AjaxResponder result = null;
-		articleService.addArticle(article);
+	public AjaxResponder add(Article article, HttpServletRequest request, HttpServletResponse response){
+		AjaxResponder result = null;		
 		article.setThumpUpCount(0);
 		article.setVisitRecordCount(0);
+		articleService.addArticle(article);
 		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", article);
 		return result;
 	}
@@ -62,30 +59,32 @@ public class ArticleController {
 		return result;
 	}
 	
-	
 	@ResponseBody
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public AjaxResponder edit(@PathVariable("id") Integer id) {
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public AjaxResponder edit(Article article) {
 		AjaxResponder result = null;
-		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", null);
+		articleService.updateArticle(article);
+		System.out.println(article.getID()+ "+" + article.getContent());
+		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", article);
 		return result;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public AjaxResponder delte(@PathVariable("id") Integer id) {
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public AjaxResponder delete(@PathVariable("id") Integer id) {
 		AjaxResponder result = null;
-		
+		articleService.deleteArticle(id);
+		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", null);
 		return result;
 	}	
 
 	@ResponseBody
 	@RequestMapping(value = "/hot", method = RequestMethod.GET)
-	public AjaxResponder getAll(HttpServletRequest request,HttpServletResponse response){
+	public AjaxResponder getHot(HttpServletRequest request,HttpServletResponse response){
 		AjaxResponder result = null;	
 		Article article = new Article();
 		//article.setIsHot(1);
-		List<Article> articles = articleService.getHotArticles(article);		
+		List<Article> articles = articleService.getHotArticles(article);				
 		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", articles);
 		return result;
 	}
@@ -100,7 +99,6 @@ public class ArticleController {
 	}
 	
 	@ResponseBody
-	
 	@RequestMapping(value = "/findByPage", method = RequestMethod.POST)
 	public AjaxResponder findByPage(@RequestParam("page")Integer page, @RequestParam("size")Integer size, HttpServletRequest request,HttpServletResponse response){
 		AjaxResponder result = null;		
@@ -112,7 +110,7 @@ public class ArticleController {
 	
 	@ResponseBody
 	@RequestMapping(value="/sidebar", method=RequestMethod.GET)
-	public AjaxResponder get(HttpServletRequest request, HttpServletResponse response){
+	public AjaxResponder getSideBar(HttpServletRequest request, HttpServletResponse response){
 		AjaxResponder result = null;
 		result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", articleService.getSideBar());
 		return result;
@@ -129,7 +127,7 @@ public class ArticleController {
 	
 	@ResponseBody
 	@RequestMapping(value="/thumbup/{id}", method=RequestMethod.GET)
-	public AjaxResponder thumpUp(@PathVariable("id") Integer id, HttpServletRequest request, HttpServletResponse response){
+	public AjaxResponder thumbUp(@PathVariable("id") Integer id, HttpServletRequest request, HttpServletResponse response){
 		AjaxResponder result = null;
 		System.out.println(id);
 		if (!thumbUpRecordService.hasAlreadyThumbUp(id)) {
@@ -140,7 +138,9 @@ public class ArticleController {
 			thumbUpRecord.setIP(iPString);
 			thumbUpRecord.setCity(AddressUtil.GetAddressByIp(iPString));
 			thumbUpRecord.setCreateTime(new Date());
+			thumbUpRecord.setTime(new Date());
 			thumbUpRecordService.add(thumbUpRecord);
+			articleService.thumbUpArticle(id);
 			result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", null);
 		}else {
 			result = AjaxResponder.getInstance(Boolean.FALSE, "查询成功", null);

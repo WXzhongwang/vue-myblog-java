@@ -33,10 +33,7 @@ public class WebsiteController {
 			@RequestParam(value="name")String name,
 			@RequestParam(value="individualitySignature")String individualitySignature,
 			@RequestParam(value="introduce")String introduce) {
-		AjaxResponder result = null;
-	    //String name = request.getParameter("form.name");
-        //String individualitySignature=request.getParameter("form.individualitySignature");
-        //String introduce = request.getParameter("form.introduce");
+		AjaxResponder result = null;	   
         System.out.println(name + "," + individualitySignature + "," + introduce);
         applicationService.update(name, individualitySignature, introduce); 
         result = AjaxResponder.getInstance(Boolean.TRUE, "查询成功", null);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.swing.text.AbstractDocument.LeafElement;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,6 @@ import com.ssm.service.ArticleService;
 import com.ssm.service.log.LogType;
 import com.ssm.service.log.RunningLog;
 
-
-
-@Transactional(readOnly = true)
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService{
 	@Resource
@@ -51,7 +49,13 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	public Article getArticle(int ID) {
 		// TODO Auto-generated method stub		
-		return articleDao.getArticle(ID);
+		Article article = null;
+		article = articleDao.getArticle(ID);
+		if(article != null) {
+			List<Tag> tags = tagDao.getArticleTagList(article.getID());
+			article.setTags(tags);
+		}		
+		return article;
 	}
 
 	@Override
@@ -87,6 +91,16 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	public List<Article> getHotArticles(Article article) {
 		// TODO Auto-generated method stub
-		return articleDao.getHotArticles(article);
+		List<Article>  list =  articleDao.getHotArticles(article);
+		for(Article item:list){
+			 List<Tag> tags = tagDao.getArticleTagList(item.getID());
+			 item.setTags(tags);
+		}
+		return list;
+	}
+	
+	@Override
+	public void thumbUpArticle(int ID) {
+		articleDao.thumbUpArticle(ID);
 	}
 }

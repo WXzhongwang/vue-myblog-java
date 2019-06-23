@@ -28,7 +28,7 @@ public class AddressUtil {
 			// 处理返回的省市区信息  
 //				System.out.println(returnStr);  
 			String[] temp = returnStr.split(",");  
-			if(temp.length<3){  
+			if(temp.length < 3){  
 				return "0";//无效IP，局域网测试  
 			}  
 			String region = (temp[5].split(":"))[1].replaceAll("\"", "");  
@@ -201,8 +201,8 @@ public class AddressUtil {
 
 	public static void main(String[] args) {  
 		AddressUtil addressUtil = new AddressUtil();  
-		// 测试ip 219.136.134.157 中国=华南=广东省=广州市=越秀区=电信  
-		String ip = "219.136.134.157";  
+		// 测试ip 219.136.134.157 中国=华南=广东省=广州市=越秀区=电信  219.136.134.157
+		String ip = "127.0.0.1";  
 		String address = "";  
 		try {  
 			address = addressUtil.getAddresses("ip="+ip, "utf-8");  
