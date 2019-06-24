@@ -40,4 +40,10 @@
         SELECT tag.* FROM tag RIGHT JOIN articletag ON tag.ID = articletag.TagID
         WHERE articletag.ArticleID = #{ArticleID}
     </select>
+    <delete id="deleteArticleTags">
+    	delete from articletag where ArticleID = #{ArticleID}
+    </delete>
+    <insert id="addArticleTag">
+    	insert into articletag (ArticleID, TagID, CreateTime) values(#{ArticleID},#{TagID}, #{CreateTime}) 
+    </insert>
 </mapper>

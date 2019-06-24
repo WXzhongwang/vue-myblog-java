@@ -1,5 +1,6 @@
 package com.ssm.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import com.ssm.dao.ArticleDao;
 import com.ssm.dao.TagDao;
 import com.ssm.domain.Article;
+import com.ssm.domain.ArticleTag;
 import com.ssm.domain.Tag;
 import com.ssm.service.ArticleService;
 import com.ssm.service.log.LogType;
@@ -28,25 +30,50 @@ public class ArticleServiceImpl implements ArticleService{
 	private TagDao tagDao;
 
 	@Override	
+	@Transactional
 	@RunningLog(getLogType = LogType.Info)
 	public void addArticle(Article article) {
 		// TODO Auto-generated method stub
 		articleDao.addArticle(article);
+		ArticleTag articleTag = null;
+		if(article.getTags() != null && article.getTags().size() > 0) {			
+			for(Tag tag : article.getTags()) {
+				articleTag = new ArticleTag();
+				articleTag.setArticleID(article.getID());
+				articleTag.setTagID(tag.getID());
+				articleTag.setCreateTime(new Date());
+				tagDao.addArticleTag(articleTag);
+			}			
+		}
 	}
 
 	@Override
+	@Transactional
 	public void updateArticle(Article article) {
 		// TODO Auto-generated method stub
 		articleDao.updateArticle(article);
+		tagDao.deleteArticleTags(article.getID());
+		ArticleTag articleTag = null;
+		if(article.getTags() != null && article.getTags().size() > 0) {			
+			for(Tag tag : article.getTags()) {
+				articleTag = new ArticleTag();
+				articleTag.setArticleID(article.getID());
+				articleTag.setTagID(tag.getID());
+				articleTag.setCreateTime(new Date());
+				tagDao.addArticleTag(articleTag);
+			}			
+		}
 	}
 
 	@Override
+	@Transactional
 	public void deleteArticle(int ID) {
-		// TODO Auto-generated method stub
-		articleDao.deleteArticle(ID);
+		tagDao.deleteArticleTags(ID);
+		articleDao.deleteArticle(ID);		
 	}
 
 	@Override
+	@Transactional
 	public Article getArticle(int ID) {
 		// TODO Auto-generated method stub		
 		Article article = null;
@@ -59,6 +86,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
+	@Transactional
 	public List<Article> getAll(Article article) {
 		// TODO Auto-generated method stub	
 		 List<Article>  list =  articleDao.getAll(article);
@@ -70,6 +98,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
+	@Transactional
 	public PageInfo<Article> findByPage(Integer page, Integer size,
 			Article article) {
 		 PageHelper.startPage(page, size);
@@ -89,6 +118,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
+	@Transactional
 	public List<Article> getHotArticles(Article article) {
 		// TODO Auto-generated method stub
 		List<Article>  list =  articleDao.getHotArticles(article);
@@ -100,6 +130,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 	
 	@Override
+	@Transactional
 	public void thumbUpArticle(int ID) {
 		articleDao.thumbUpArticle(ID);
 	}
