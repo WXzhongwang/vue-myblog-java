@@ -19,17 +19,17 @@ import com.ssm.service.AdminService;
 public class AdminController {
 	@Resource
 	private AdminService adminService;
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/checkLogin", method=RequestMethod.GET)
+	@RequestMapping(value = "/checkLogin", method = RequestMethod.GET)
 	public AjaxResponder checkLogin(HttpServletRequest request, HttpServletResponse response) {
 		AjaxResponder result = null;
 		try {
 			boolean flag = adminService.adminLogin();
-			result = AjaxResponder.getInstance(Boolean.TRUE , "登录成功"  , true);
-		} catch(Exception ex){
+			result = AjaxResponder.getInstance(Boolean.TRUE, "登录成功", true);
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			result = AjaxResponder.getInstance(Boolean.TRUE , "登录成功"  , false);
+			result = AjaxResponder.getInstance(Boolean.TRUE, "登录成功", false);
 		}
 		return result;
 	}
