@@ -10,7 +10,7 @@
   <properties>
         <!-- Spring版本号 -->
         <spring.version>4.2.5.RELEASE</spring.version>
-        <mybatis.version>3.4.4</mybatis.version>
+        <mybatis.version>3.5.6</mybatis.version>
         <!-- jdbc driver setting -->
 		<mysql.driver.version>5.1.30</mysql.driver.version>
 		<druid.version>1.0.18</druid.version>
